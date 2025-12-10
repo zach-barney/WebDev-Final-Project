@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess</title>
+    <link rel="stylesheet" href="chessstyles/cstyles.css">
+</head>
+
+<body>
+    <h1 id="Top" class="h1">
+        
+
+        <a href="webapp.html" 
+        style="font-size: large;
+    text-align: left; background-color: rgb(221, 210, 196); color: rgb(121, 99, 99);text-decoration: none; padding: 10; margin-left: 500;
+    font-family: Georgia, 'Times New Roman', Times, serif;">Minesweeper</a>
+
+    The Art of War on 64 Squares
+
+        <a href="resume.html"
+        style="font-size: large;
+    text-align: right; background-color: rgb(221, 210, 196); color: rgb(121, 99, 99); text-decoration: none; padding: 10; margin-right: 500;
+    font-family: Georgia, 'Times New Roman', Times, serif;">Resume</a>
+    </h1>
+    <h2>
+        
+    </h2>
+    <div class="image">
+    <img src="data:image/jpeg;base64,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" 
+    alt="chess image"
+    height="250">
+    <img src="data:image/jpeg;base64,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"
+    alt="other chess image"
+    height="250">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfiuPn3mLBc1bStMXvwoDpyyf68PFf6gpXNg&s"
+    alt="other other chess image"
+    height="250">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScrevMK0L-IvBYgKiGu8QFLgm0TBVQnxXfNg&s"
+    alt="final chess image"
+    height="250">
+    </div>
+</body>
+
+
+<p>Chess is a strategic board game built on logic, pattern recognition, and long-term planning. Played between two
+opponents on an eight-by-eight board of alternating light and dark squares, the game has endured for centuries because
+of its perfect balance between simplicity of rules and depth of possibilities. While the movements of the pieces are
+straightforward to learn, the strategy beneath them is vast, making chess both approachable for beginners and endlessly
+challenging for experts.</p>
+
+<p>To begin a game, each player controls sixteen pieces, which reside on 2 rows of 8 squares: 
+   <ol>
+    <li>
+    2 Rooks (on either edge of back row), which can move/capture
+    <ul>
+        <li>
+            horizontally in a straight line
+            
+        </li>
+        <li>
+            vertically in a straight line
+        </li>
+    </ul>
+    </li>
+
+    <li>
+         2 Knights (situated one square adjacent moving inward from each rook), which can move/caputre in the form of an L
+    <ul>
+        <li>
+            One side of the L must consist of one square
+        </li>
+        <li>
+            the other side of the L must consist of 2 squares
+        </li>
+        <li>
+            whether one starts first with one square or 2 doesn't matter, just that the L starts horizontally or vertically adjacent to the knight
+        </li>
+    </ul>
+    </li>
+    <li>
+        2 Bishops (situated one square adjacent moving inward from each knight), which move/capture diagonally across the board, each starting on different colored squares and consequentially are confined to those colors
+    </li>
+<li>
+    1 Queen (starting on the remaining square that corresponds to her piece color), who has the capacity to move/capture like both a rook and a bishop. 
+</li>
+<li>
+    1 King (starting on the only square remaining on the back row, being opposite his piece color), who may only move/capture 1 square adjacent to his current position. 
+</li>
+<li>
+    8 identical pawns (starting on the second row), which may start by moving one or two squares forward vertically, and march one square at a time. Pawns capture one square diagonally, and may not retreat. 
+</li>
+   </ol> 
+White moves first, and players alternate turns. The objective is to checkmate the
+opponent’s king—threaten it with capture in a way that cannot be escaped—while simultaneously protecting your own.
+Despite this simple goal, chess unfolds through a series of phases, each requiring different skills and strategic
+awareness.</p>
+
+<p>The opening phase revolves around establishing control of the center, developing your pieces efficiently, and ensuring
+the safety of your king. Good openings bring minor pieces—knights and bishops—into the game quickly and harmoniously.
+Castling, a special move that tucks the king behind a wall of pawns while activating the rook, is usually an early
+priority. Beginners often make the mistake of moving the same piece multiple times or bringing the queen out too early,
+but strong opening principles emphasize coordination over individual piece activity.</p>
+
+<p>The middlegame is where tactics and strategy intersect. Once pieces are developed, players begin looking for weaknesses
+in the opponent’s position, such as exposed kings, poorly protected pieces, or weak pawns. Tactical motifs like forks,
+pins, skewers, and discovered attacks often decide games at this stage. Alongside tactics, broader strategic ideas—such
+as improving piece activity, controlling important files and diagonals, or preparing pawn breaks—guide long-term plans.
+Good players shift between tactical calculation and strategic understanding, always adapting to the changing structure
+on the board.</p>
+
+<p>As pieces are exchanged and the board opens up, the game transitions into the endgame, a phase where precision becomes
+even more critical. Kings, which must be shielded in earlier phases, become active attackers in the endgame. Concepts
+such as pawn promotion, opposition, and creating passed pawns determine success. Many endgames follow known theoretical
+patterns—like king and pawn versus king or rook and king versus king—turning the endgame into a blend of technique and
+timing.</p>
+
+<p>Overall, chess strategy lies in balancing immediate tactical threats with long-term positional goals. Effective players
+think ahead, considering not only their own plans but also their opponent’s intentions. With its interplay of
+calculation and creativity, chess offers endless opportunities for growth and exploration. Learning the rules is only
+the first step; mastering the game requires practice, study, and the willingness to think deeply about every move.
+</p>
+
+<br>
+
+
+
+<div class="chessvideo">
+    <p class="videointro">Here are some tips from the world #1 Magnus Carlsen!</p>
+
+    <iframe 
+        width="550" 
+        height="250"
+        src="https://www.youtube.com/embed/MA8Scue28Ks"
+        class="video"
+        allowfullscreen>
+    </iframe>
+</div>
+
+
+
+
+ <br>
+ <br>
+
+        <div class='tableauPlaceholder' id='viz1765214461790' style='position: relative'><noscript><a href='#'><img alt='BIG GAME BATTLE ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Su&#47;SuperBowl2018LIIBigGameBattle&#47;BIGGAMEBATTLE&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='SuperBowl2018LIIBigGameBattle&#47;BIGGAMEBATTLE' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Su&#47;SuperBowl2018LIIBigGameBattle&#47;BIGGAMEBATTLE&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='_gl=1*1ayo2o1*_ga*MTQ0MTMwOTM4Mi4xNzYyMTkxMTEz*_ga_8YLN0SNXVS*czE3NjUyMTQzODYkbzQkZzEkdDE3NjUyMTQ0MjMkajYwJGwwJGgw*_gcl_au*MTU5MTE4ODY3LjE3NjIxOTExMTMuMTIxNzkwMjAwMi4xNzYyMTkxNTQ4LjE3NjIxOTE2NjQ.' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1765214461790');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='900px';vizElement.style.height='927px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+
+        <br>
+
+
+        <br>
+        <div class="videointro">
+        <a href="#Top" style="font-size: large;
+    text-align: left; background-color: rgb(221, 210, 196); color: rgb(121, 99, 99);text-decoration: none; padding: 10; margin-left: 500;
+    font-family: Georgia, 'Times New Roman', Times, serif;">Top</a>
+        </div>
+
+        <br>
+
+</html>

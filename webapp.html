@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minesweeper</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to bottom, #1e3c72, #2a5298);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        color: white;
+        margin: 0;
+        padding: 20px;
+        overflow-x: hidden;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+        text-shadow: 2px 2px #000;
+    }
+
+    #controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    select, button {
+        padding: 8px 14px;
+        background: #f5a623;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #info {
+        display: flex;
+        justify-content: space-between;
+        width: 300px;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    #board {
+        display: grid;
+        gap: 2px;
+        margin-top: 10px;
+    }
+
+    .cell {
+        width: 28px;
+        height: 28px;
+        background: #4a90e2;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+        user-select: none;
+        transition: 0.1s;
+    }
+
+    .cell.revealed {
+        background: #e0e0e0;
+        color: black;
+        cursor: default;
+    }
+
+    .cell.bomb {
+        background: red;
+        color: black;
+    }
+
+    .cell.flagged {
+        background: #f5a623;
+    }
+
+    .cell:hover:not(.revealed) {
+        filter: brightness(1.25);
+    }
+
+    /* Explosion flash */
+    @keyframes explodeFlash {
+        0% { background: white; }
+        100% { background: transparent; }
+    }
+
+    .screen-flash {
+        animation: explodeFlash 0.4s ease-out;
+    }
+
+    /* Explosion particles */
+    .particle {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: orange;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: particleFly 0.8s ease-out forwards;
+    }
+
+    @keyframes particleFly {
+        from { opacity: 1; transform: translate(0,0) scale(1); }
+        to { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+    }
+
+    /* Win banner */
+    #winBanner {
+        position: fixed;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: gold;
+        padding: 25px 60px;
+        font-size: 48px;
+        font-weight: bold;
+        color: black;
+        border-radius: 18px;
+        box-shadow: 0 0 25px yellow;
+        opacity: 0;
+        transition: 1s;
+        text-shadow: 0 0 8px white;
+        z-index: 9999;
+    }
+
+    #winBanner.show {
+        top: 120px;
+        opacity: 1;
+    }
+
+    #homeBtn {
+    padding: 8px 16px;
+    background-color: #f5a623;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+</style>
+</head>
+
+<body>
+<h1>Minesweeper</h1>
+
+<div id="controls">
+    <select id="sizeSelect">
+        <option value="9">Beginner (9×9)</option>
+        <option value="16" selected>Intermediate (16×16)</option>
+        <option value="40">Expert (40×40)</option>
+    </select>
+    <button id="resetBtn">Restart</button>
+    <button id="homeBtn" onclick="window.location.href='index.html'">Home</button>
+</div>
+
+<div id="info">
+    <div>Flags Left: <span id="flags">0</span></div>
+    <div>Time: <span id="timer">0</span>s</div>
+</div>
+
+<div id="board"></div>
+
+<div id="winBanner">🎉 CONGRATULATIONS!!! 🎉</div>
+
+
+<script>
+let width = 16;
+let height = 16;
+let bombsCount = 40;
+
+let flagsLeft;
+let cells = [];
+let board = document.getElementById('board');
+let flagsDisplay = document.getElementById('flags');
+let timerDisplay = document.getElementById('timer');
+let time = 0;
+let timer;
+let gameOver = false;
+
+/* Update difficulty */
+function updateDifficulty(size) {
+    width = size;
+    height = size;
+    if (size === 9) bombsCount = 10;
+    if (size === 16) bombsCount = 40;
+    if (size === 40) bombsCount = 200;
+}
+
+document.getElementById("sizeSelect").addEventListener("change", e => {
+    updateDifficulty(parseInt(e.target.value));
+    startGame();
+});
+
+function startGame() {
+    board.innerHTML = "";
+    board.style.gridTemplateColumns = `repeat(${width}, 30px)`;
+    board.style.gridTemplateRows = `repeat(${height}, 30px)`;
+
+    cells = [];
+    flagsLeft = bombsCount;
+    flagsDisplay.textContent = flagsLeft;
+    gameOver = false;
+
+    clearInterval(timer);
+    time = 0;
+    timerDisplay.textContent = time;
+
+    document.getElementById("winBanner").classList.remove("show");
+
+    timer = setInterval(() => {
+        time++;
+        timerDisplay.textContent = time;
+    }, 1000);
+
+    // Build cells
+    for (let i = 0; i < width * height; i++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+        cell.dataset.revealed = "false";
+        cell.dataset.flagged = "false";
+        cell.dataset.bomb = "false";
+
+        cell.addEventListener("click", () => revealCell(cell));
+        cell.addEventListener("contextmenu", e => {
+            e.preventDefault();
+            flagCell(cell);
+        });
+
+        board.appendChild(cell);
+        cells.push(cell);
+    }
+
+    // Place bombs
+    let bombPos = [];
+    while (bombPos.length < bombsCount) {
+        let p = Math.floor(Math.random() * width * height);
+        if (!bombPos.includes(p)) bombPos.push(p);
+    }
+    bombPos.forEach(p => cells[p].dataset.bomb = "true");
+
+    // Compute numbers
+    cells.forEach((cell, i) => {
+        if (cell.dataset.bomb === "true") return;
+        let count = 0;
+        getNeighbors(i).forEach(n => {
+            if (cells[n].dataset.bomb === "true") count++;
+        });
+        cell.dataset.number = count;
+    });
+}
+
+function getNeighbors(index) {
+    const list = [];
+    const x = index % width;
+    const y = Math.floor(index / width);
+
+    for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+            if (dx === 0 && dy === 0) continue;
+            let nx = x + dx;
+            let ny = y + dy;
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                list.push(ny * width + nx);
+            }
+        }
+    }
+    return list;
+}
+
+function revealCell(cell) {
+    if (gameOver || cell.dataset.revealed === "true" || cell.dataset.flagged === "true") return;
+
+    cell.dataset.revealed = "true";
+    cell.classList.add("revealed");
+
+    if (cell.dataset.bomb === "true") {
+        cell.classList.add("bomb");
+        triggerExplosion(cell);
+        endGame(false);
+        return;
+    }
+
+    let number = parseInt(cell.dataset.number);
+    if (number > 0) {
+        cell.textContent = number;
+    } else {
+        getNeighbors(parseInt(cell.dataset.index)).forEach(n => revealCell(cells[n]));
+    }
+
+    checkWin();
+}
+
+function flagCell(cell) {
+    if (gameOver || cell.dataset.revealed === "true") return;
+
+    if (cell.dataset.flagged === "true") {
+        cell.dataset.flagged = "false";
+        cell.classList.remove("flagged");
+        flagsLeft++;
+    } else if (flagsLeft > 0) {
+        cell.dataset.flagged = "true";
+        cell.classList.add("flagged");
+        flagsLeft--;
+    }
+
+    flagsDisplay.textContent = flagsLeft;
+}
+
+function triggerExplosion(cell) {
+    document.body.classList.add("screen-flash");
+    setTimeout(() => document.body.classList.remove("screen-flash"), 300);
+
+    const rect = cell.getBoundingClientRect();
+    for (let i = 0; i < 40; i++) {
+        let p = document.createElement("div");
+        p.classList.add("particle");
+
+        p.style.left = rect.left + rect.width / 2 + "px";
+        p.style.top = rect.top + rect.height / 2 + "px";
+
+        p.style.setProperty("--dx", (Math.random() - 0.5) * 500 + "px");
+        p.style.setProperty("--dy", (Math.random() - 0.5) * 500 + "px");
+
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 900);
+    }
+}
+
+function endGame(win) {
+    gameOver = true;
+    clearInterval(timer);
+
+    if (win) {
+        document.getElementById("winBanner").classList.add("show");
+        return;
+    }
+
+    // reveal all bombs
+    cells.forEach(c => {
+        if (c.dataset.bomb === "true") {
+            c.classList.add("bomb");
+            c.textContent = "💣";
+        }
+    });
+}
+
+function checkWin() {
+    let revealed = cells.filter(c => c.dataset.revealed === "true").length;
+    if (revealed === width * height - bombsCount) {
+        endGame(true);
+    }
+}
+
+document.getElementById("resetBtn").addEventListener("click", startGame);
+
+startGame();
+</script>
+
+</body>
+</html>

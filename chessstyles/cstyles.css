@@ -1,0 +1,52 @@
+body{
+    background-color: rgb(121, 99, 99);
+    color: rgb(221, 210, 196);
+}
+
+.h1{
+    font-size: xxx-large;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+h2{
+    color: rgb(221, 210, 196);
+    font-size: x-large;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    
+}
+.image{
+    display: flex;
+    justify-content: center;
+    border: 2px solid rgb(221, 210, 196);
+    position: center;
+    width: 100%;
+    padding: 0; 
+}
+
+.videointro{
+    font-size: x-large;
+    color:black;
+    text-align: center;
+    margin-bottom: 10px;
+
+    
+}
+
+.chessvideo{
+    background:rgb(221, 210, 196);
+    color: rgb(121, 99, 99);
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: center;
+    
+}
+
+.video{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
